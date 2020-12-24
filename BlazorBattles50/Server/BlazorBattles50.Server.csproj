@@ -13,5 +13,8 @@
     <ProjectReference Include="..\Shared\BlazorBattles50.Shared.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Watch Include="..\Client\**\*.razor"></Watch>
+	</ItemGroup>
 
 </Project>
