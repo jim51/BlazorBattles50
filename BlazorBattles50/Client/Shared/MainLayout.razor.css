@@ -33,7 +33,8 @@
 
 @media (max-width: 640.98px) {
     .top-row:not(.auth) {
-        display: none;
+        /*讓香蕉顯示在手機版本*/
+        /*display: none;*/
     }
 
     .top-row.auth {

@@ -30,6 +30,15 @@ a, .btn-link {
     color: red;
 }
 
+.top-menu {
+    /*正中央*/
+    justify-content: center;
+    /*寬度100%*/
+    width: 100%;
+    /*固定位置*/
+    display: flex;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
