@@ -1,6 +1,8 @@
-﻿<div class="top-menu">
+﻿@inject BlazorBattles50.Client.Services.IBananaService BananaService
+@implements IDisposable
+<div class="top-menu">
     <img src="icons/I_C_Banana.png" />
-    <span class="popover-header">@Bananas</span>
+    <span class="popover-header">@BananaService.Bananas</span>
     <AddBananas BananasAdded="AddBananas"></AddBananas>
 </div>
 
@@ -12,5 +14,14 @@
 
     public void AddBananas(int value){
         Bananas += value;
+    }
+
+    protected override void OnInitialized(){
+        BananaService.OnChange += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public void Dispose(){
+        BananaService.OnChange -= StateHasChanged;
     }
 }
