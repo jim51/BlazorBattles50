@@ -9,6 +9,7 @@ namespace BlazorBattles50.Client.Services
     {
         event Action OnChange;
         int Bananas { get; set; }
-        void EatBananas(int amouont);
+        void EatBananas(int amount);
+        void AddBananas(int amount);
     }
 }

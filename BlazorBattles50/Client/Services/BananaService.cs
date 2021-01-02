@@ -11,9 +11,15 @@ namespace BlazorBattles50.Client.Services
 
         public event Action OnChange;
 
-        public void EatBananas(int amouont)
+        public void AddBananas(int amount)
         {
-            Bananas -= amouont;
+            Bananas += amount;
+            BananasChanged();
+        }
+
+        public void EatBananas(int amount)
+        {
+            Bananas -= amount;
             BananasChanged();
         }
 
