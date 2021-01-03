@@ -30,6 +30,14 @@ a, .btn-link {
     color: red;
 }
 
+.army-list {
+    /*固定位置*/
+    display: flex;
+    justify-content: space-evenly;
+    /*間距*/
+    padding: 10px;
+}
+
 .top-menu {
     /*正中央*/
     justify-content: center;
