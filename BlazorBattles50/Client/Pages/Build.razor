@@ -1,6 +1,7 @@
 ﻿@page "/build"
 @inject BlazorBattles50.Client.Services.IBananaService BananaService
 @inject BlazorBattles50.Client.Services.IUnitService UnitService
+@inject IToastService ToastService
 <h3>Build</h3>
 
 <div class="form-group">
@@ -28,6 +29,7 @@
             UnitService.Units.FirstOrDefault(unit => unit.Id == selectedUnitId);
         if(selectUnit.BananaCost>BananaService.Bananas){
             needMoreBananas = true;
+            ToastService.ShowError("Not enough bananas!", ":(");
             return;
         }
 
