@@ -1,0 +1,41 @@
+﻿@page "/login"
+
+
+@if (IsAuthenticated)
+{
+    <h3>Welcome, @user.username!</h3>
+}
+else
+{
+    <h3>login</h3>
+    <EditForm Model="@user" OnValidSubmit="HandelLogin">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <p>
+            <label>User Name</label>
+            <div>
+                <InputText id="username" @bind-Value="user.username"></InputText>
+            </div>
+        </p>
+        <p>
+            <label>Password</label>
+            <div>
+                <InputText id="password" type="password" @bind-Value="user.password"></InputText>
+            </div>
+        </p>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+        <ValidationSummary></ValidationSummary>
+    </EditForm>
+
+}
+
+
+@code {
+    private BlazorBattles50.Shared.UserLogin user = new BlazorBattles50.Shared.UserLogin();
+    bool IsAuthenticated = false;
+    private void HandelLogin()
+    {
+        Console.WriteLine($"{user.username} // {user.password}");
+        IsAuthenticated = true;
+    }
+}
