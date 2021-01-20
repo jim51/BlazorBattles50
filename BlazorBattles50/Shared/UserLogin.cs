@@ -10,8 +10,8 @@ namespace BlazorBattles50.Shared
     public class UserLogin
     {
         [Required(ErrorMessage ="請輸入帳號")]
-        public string username { get; set; }
+        public string Username { get; set; }
         [Required]
-        public string password { get; set; }
+        public string Password { get; set; }
     }
 }

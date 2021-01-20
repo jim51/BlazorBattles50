@@ -1,0 +1,66 @@
+﻿@page "/register"
+@inject BlazorBattles50.Client.Services.IUnitService UnitService
+@inject NavigationManager NavigationManager
+<h3>Register</h3>
+<EditForm Model="@user" OnValidSubmit="HandelRegiser">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="user.Email" class="form-control" />
+        <ValidationMessage For="(()=> user.Email)" />
+    </div>
+    <div class="form-group">
+        <label for="username">UserName</label>
+        <InputText id="username" @bind-Value="user.Username" class="form-control" />
+        <ValidationMessage For="(()=> user.Username)" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
+        <ValidationMessage For="(()=> user.Password)" />
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword">Confirm password</label>
+        <InputText id="confirmPassword" @bind-Value="user.ConfirmPassword" type="password" class="form-control" />
+        <ValidationMessage For="(()=> user.ConfirmPassword)" />
+    </div>
+    <div class="form-group">
+        <label for="bio">Bio</label>
+        <InputTextArea id="bio" @bind-Value="user.Bio" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="bananas">Banans</label>
+        <InputNumber id="bananas" @bind-Value="user.Bananas" class="form-control" />
+        <ValidationMessage For="(()=> user.Bananas)" />
+    </div>
+    <div class="form-group">
+        <label for="startUnit">Start Unit</label>
+        <InputSelect id="startUnit" @bind-Value="user.StartUnitId" class="form-control">
+            @foreach (var item in UnitService.Units)
+            {
+                <option value="@item.Id.ToString()">@item.Title</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="(()=> user.StartUnitId)" />
+    </div>
+        <div class="form-group">
+        <label for="dateOfBirth">Date of Birth</label>
+        <InputDate id="dateOfBirth" @bind-Value="user.DateOfBirth" class="form-control" />
+    </div>
+    <div class="form-check">
+       <InputCheckbox id="confirmed" @bind-Value="user.IsConfirmed" class="form-check-input" />
+        <label for="confirmed">Confirmed</label>
+        <ValidationMessage For="(()=> user.IsConfirmed)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@code {
+    BlazorBattles50.Shared.UserRegister user = new BlazorBattles50.Shared.UserRegister();
+
+    void HandelRegiser()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+}
