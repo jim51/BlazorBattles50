@@ -11,7 +11,7 @@ namespace BlazorBattles50.Client
     {
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            //return Task.FromResult(new AuthenticationState(new System.Security.Claims.ClaimsPrincipal()));
+            return Task.FromResult(new AuthenticationState(new System.Security.Claims.ClaimsPrincipal()));
             //建立一個新的身分
             var identity = new ClaimsIdentity(
                 new[]
