@@ -1,13 +1,8 @@
-﻿@page "/login"
+﻿@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthStateProvider
 
 
-@if (IsAuthenticated)
-{
-    <h3>Welcome, @user.Username!</h3>
-}
-else
-{
-    <h3>login</h3>
+    Please log in below or <NavLink  href="register">register</NavLink>  for a new account.
     <EditForm Model="@user" OnValidSubmit="HandelLogin">
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <div class="form-group">
@@ -26,15 +21,14 @@ else
         <ValidationSummary></ValidationSummary>
     </EditForm>
 
-}
 
 
 @code {
     private BlazorBattles50.Shared.UserLogin user = new BlazorBattles50.Shared.UserLogin();
-    bool IsAuthenticated = false;
-    private void HandelLogin()
+    private async void HandelLogin()
     {
-        Console.WriteLine($"{user.Username} // {user.Password}");
-        IsAuthenticated = true;
+        await LocalStorage.SetItemAsync<bool>("IsAuthenticated", true);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+
     }
 }
