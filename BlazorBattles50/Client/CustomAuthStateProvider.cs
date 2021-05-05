@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,31 @@ namespace BlazorBattles50.Client
 {
     public class CustomAuthStateProvider : AuthenticationStateProvider
     {
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        private readonly ILocalStorageService _localStorageService;
+
+        public CustomAuthStateProvider(ILocalStorageService localStorageService)
         {
-            //回傳一個空身分(導入至Login)
-            //return Task.FromResult(new AuthenticationState(new System.Security.Claims.ClaimsPrincipal()));
-            //建立一個新的身分
-            var identity = new ClaimsIdentity(
+            _localStorageService = localStorageService;
+        }
+
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+        {
+            if(await _localStorageService.GetItemAsync<bool>("IsAuthenticated"))
+            {
+                var identity = new ClaimsIdentity(
                 new[]
                 {
-                     new Claim(ClaimTypes.Name,"Jim")
+                        new Claim(ClaimTypes.Name,"Jim")
                 }, "test authentication type");
-            var user = new ClaimsPrincipal(identity);
-            return Task.FromResult(new AuthenticationState(user));
+                var user = new ClaimsPrincipal(identity);
+                var state = new AuthenticationState(user);
+                NotifyAuthenticationStateChanged(Task.FromResult(state));
+                return state;
+                //return Task.FromResult(new AuthenticationState(user));
+            }
+           
+            
+            return (new AuthenticationState(new System.Security.Claims.ClaimsPrincipal()));
         }
     }
 }
