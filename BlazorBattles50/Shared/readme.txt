@@ -7,4 +7,12 @@ dotnet tool install --global dotnet-ef
 Microsoft.EntityFrameworkCore
 Microsoft.EntityFrameworkCore.Design
 Microsoft.EntityFrameworkCore.Sqlite
+Microsoft.EntityFrameworkCore.Tools
 
+
+// 新增Migration
+cd .\BlazorBattles50\Server
+dotnet ef migrations add Initial
+
+// 更新資料庫
+dotnet ef database update
