@@ -3,26 +3,26 @@ using Blazored.Toast.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace BlazorBattles50.Client.Services
 {
     public class UnitService : IUnitService
     {
+        private readonly IToastService _toastService;
+        private readonly HttpClient _http;
 
-        public UnitService(IToastService toastService)
+        public UnitService(IToastService toastService, HttpClient http)
         {
             _toastService = toastService;
+            _http = http;
         }
-        public IList<Unit> Units { get; } = new List<Unit>
-        {
-            new Unit(){Id=1,Title="騎士", Attack=10,Defense=10,BananaCost=100},
-            new Unit(){Id=2,Title="弓手", Attack=15,Defense=5,BananaCost=50},
-            new Unit(){Id=3,Title="魔法師", Attack=20,Defense=1,BananaCost=200},
-        };
+        public IList<Unit> Units { get; set; } = new List<Unit>();
 
         public IList<UserUnit> MyUnits { get; set; } = new List<UserUnit>();
-        public IToastService _toastService { get; }
+       
 
         public void AddUnit(int unitId)
         {
@@ -31,6 +31,14 @@ namespace BlazorBattles50.Client.Services
             _toastService.ShowSuccess($"Your  {unit.Title} has been built!", "Unit built!");
             //Console.WriteLine($"{unit.Title} was built!");
             //Console.WriteLine($"Your army size: {MyUnits.Count}");
+        }
+
+        public async Task LoadUnitsAsync()
+        {
+            if (Units.Count() == 0)
+            {
+                Units = await _http.GetFromJsonAsync<IList<Unit>>("api/unit");
+            }
         }
     }
 }

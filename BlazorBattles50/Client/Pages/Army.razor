@@ -2,29 +2,39 @@
 @inject BlazorBattles50.Client.Services.IUnitService UnitService
 @attribute [Authorize]
 <h3>army</h3>
-
-
-@foreach (var userUnit in UnitService.MyUnits)
+@if (UnitService.Units.Count() > 0)
 {
-    <div class="army-list">
-        <div>
-            @switch (userUnit.UnitId)
-            {
-                case 1: <img src="icons/W_Sword006.png"/> break;
-                case 2: <img src="icons/S_Bow08.png"/> break;
-                case 3: <img src="icons/C_Hat01.png"/> break;
-            }
-        </div>
-        <div>
-            @UnitService.Units.First(unit => unit.Id == userUnit.UnitId).Title
-        </div>
+    @foreach (var userUnit in UnitService.MyUnits)
+    {
+        <div class="army-list">
+            <div>
+                @switch (userUnit.UnitId)
+                {
+                    case 1:<img src="icons/W_Sword006.png" /> break;
+                    case 2: <img src="icons/S_Bow08.png" /> break;
+                    case 3: <img src="icons/C_Hat01.png" />break;
+                }
+            </div>
+            <div>
+                @UnitService.Units.First(unit => unit.Id == userUnit.UnitId).Title
+            </div>
 
-        <div>
-            @userUnit.HitPoints HP
+            <div>
+                @userUnit.HitPoints HP
+            </div>
         </div>
-    </div>
+    }
+
+}
+else
+{
+    <span>Loading Units...</span>
 }
 
-@code {
 
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await UnitService.LoadUnitsAsync();
+    }
 }
