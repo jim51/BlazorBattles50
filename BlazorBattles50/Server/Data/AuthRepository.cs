@@ -1,4 +1,5 @@
 ﻿using BlazorBattles50.Shared;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,10 @@ namespace BlazorBattles50.Server.Data
 
         public async Task<int> Regiseter(User user, string password)
         {
+            if (await UserExists(user.Email))
+            {
+                return -1;
+            }
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -29,9 +34,13 @@ namespace BlazorBattles50.Server.Data
             return user.Id;
         }
 
-        public Task<bool> UserExists(string email)
+        public async Task<bool> UserExists(string email)
         {
-            throw new NotImplementedException();
+            if(await _context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower()))
+            {
+                return true;
+            }
+            return false;
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
