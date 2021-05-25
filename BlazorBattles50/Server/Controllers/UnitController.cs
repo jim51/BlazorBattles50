@@ -1,4 +1,4 @@
-﻿using BlazorBattles50.Server.Pages;
+﻿using BlazorBattles50.Server.Data;
 using BlazorBattles50.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

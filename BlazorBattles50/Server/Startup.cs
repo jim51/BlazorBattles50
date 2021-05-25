@@ -1,4 +1,4 @@
-using BlazorBattles50.Server.Pages;
+using BlazorBattles50.Server.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;

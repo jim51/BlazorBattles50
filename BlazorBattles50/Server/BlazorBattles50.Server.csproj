@@ -27,8 +27,4 @@
 		<Watch Include="..\Client\**\*.razor"></Watch>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Data\" />
-	</ItemGroup>
-
 </Project>

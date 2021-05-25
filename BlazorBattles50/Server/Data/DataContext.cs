@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorBattles50.Server.Pages
+namespace BlazorBattles50.Server.Data
 {
     public class DataContext : DbContext
     {
