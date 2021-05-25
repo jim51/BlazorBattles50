@@ -16,3 +16,6 @@ dotnet ef migrations add Initial
 
 // 更新資料庫
 dotnet ef database update
+
+// 下戴DB Browser for SQLite
+https://sqlitebrowser.org/
