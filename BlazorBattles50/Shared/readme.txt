@@ -19,3 +19,16 @@ dotnet ef database update
 
 // 下戴DB Browser for SQLite
 https://sqlitebrowser.org/
+
+// API:Put更新資料庫
+// 使用PostMan
+https://localhost:5001/api/unit/1
+
+    {
+        "id": 1,
+        "title": "騎士",
+        "attack": 10,
+        "defense": 10,
+        "hitPoints": 100,
+        "bananaCost": 100
+    }
