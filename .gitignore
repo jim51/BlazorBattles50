@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+BlazorBattles50/Server/blazorbattles.db-shm
+
+BlazorBattles50/Server/blazorbattles.db-wal
