@@ -15,23 +15,33 @@ namespace BlazorBattles50.Server.Data
         {
             _context = context;
         }
-        public Task<string> Login(string email, string password)
+        public Task<ServiceResponse<string>> Login(string email, string password)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<int> Regiseter(User user, string password)
+        public async Task<ServiceResponse<int>> Regiseter(User user, string password)
         {
             if (await UserExists(user.Email))
             {
-                return -1;
+                return new ServiceResponse<int>
+                {
+                    Success = false,
+                    Data = -1,
+                    Message = "使用者已存在!"
+                };
             }
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
-            return user.Id;
+            return new ServiceResponse<int>
+            {
+                Success = true,
+                Data = user.Id,
+                Message = "註冊成功!"
+            };
         }
 
         public async Task<bool> UserExists(string email)

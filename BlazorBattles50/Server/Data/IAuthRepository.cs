@@ -8,8 +8,8 @@ namespace BlazorBattles50.Server.Data
 {
     public interface IAuthRepository
     {
-        Task<int> Regiseter(User user, string password);
-        Task<string> Login(string email, string password);
+        Task<ServiceResponse<int>> Regiseter(User user, string password);
+        Task<ServiceResponse<string>> Login(string email, string password);
         Task<bool> UserExists(string email);
     }
 }
