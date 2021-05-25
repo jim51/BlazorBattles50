@@ -32,3 +32,8 @@ https://localhost:5001/api/unit/1
         "hitPoints": 100,
         "bananaCost": 100
     }
+
+
+// 新增user Migration
+dotnet ef migrations add user
+dotnet ef database update
