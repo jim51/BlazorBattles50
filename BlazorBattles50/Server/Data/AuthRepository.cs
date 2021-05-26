@@ -1,8 +1,13 @@
 ﻿using BlazorBattles50.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BlazorBattles50.Server.Data
@@ -10,11 +15,14 @@ namespace BlazorBattles50.Server.Data
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
+        private readonly IConfiguration _configuration;
 
-        public AuthRepository(DataContext context)
+        public AuthRepository(DataContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
+
         public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
@@ -32,7 +40,7 @@ namespace BlazorBattles50.Server.Data
             }
             else
             {
-                response.Data = user.Id.ToString();
+                response.Data = CreateToken(user);
             }
 
             return response;
@@ -55,7 +63,7 @@ namespace BlazorBattles50.Server.Data
             await _context.SaveChangesAsync();
             return new ServiceResponse<int>
             {
-              
+
                 Data = user.Id,
                 Message = "註冊成功!"
             };
@@ -63,7 +71,7 @@ namespace BlazorBattles50.Server.Data
 
         public async Task<bool> UserExists(string email)
         {
-            if(await _context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower()))
+            if (await _context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower()))
             {
                 return true;
             }
@@ -72,7 +80,7 @@ namespace BlazorBattles50.Server.Data
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using(var hmac = new System.Security.Cryptography.HMACSHA512())
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
@@ -80,9 +88,9 @@ namespace BlazorBattles50.Server.Data
             }
         }
 
-        private bool VerifyPasswordHash(string password , byte[] passwordHash, byte[] passwordSalt)
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using(var hmac =new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++)
@@ -95,6 +103,29 @@ namespace BlazorBattles50.Server.Data
                 return true;
 
             }
+        }
+
+        private string CreateToken(User user)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                    _configuration.GetSection("AppSettings:Token").Value
+                ));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds
+                );
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
         }
     }
 }
