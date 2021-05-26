@@ -27,7 +27,6 @@ namespace BlazorBattles50.Server.Data
                 return new ServiceResponse<int>
                 {
                     Success = false,
-                    Data = -1,
                     Message = "使用者已存在!"
                 };
             }
@@ -38,7 +37,7 @@ namespace BlazorBattles50.Server.Data
             await _context.SaveChangesAsync();
             return new ServiceResponse<int>
             {
-                Success = true,
+              
                 Data = user.Id,
                 Message = "註冊成功!"
             };
