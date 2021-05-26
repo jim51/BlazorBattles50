@@ -1,25 +1,26 @@
 ﻿@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @inject AuthenticationStateProvider AuthStateProvider
+@inject BlazorBattles50.Client.Services.IAuthService AuthService
+@inject IToastService ToastService
 
+    Please log in below or <NavLink href="register">register</NavLink>  for a new account.
+<EditForm Model="@user" OnValidSubmit="HandelLogin">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div class="form-group">
+        <label for="username">Email</label>
+        <InputText id="email" @bind-Value="user.Email" class="form-control" />
 
-    Please log in below or <NavLink  href="register">register</NavLink>  for a new account.
-    <EditForm Model="@user" OnValidSubmit="HandelLogin">
-        <DataAnnotationsValidator></DataAnnotationsValidator>
-        <div class="form-group">
-            <label for="username">Email</label>
-            <InputText id="email" @bind-Value="user.Email" class="form-control" />
-         
-        </div>
+    </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
 
-        </div>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Login</button>
-        <ValidationSummary></ValidationSummary>
-    </EditForm>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <ValidationSummary></ValidationSummary>
+</EditForm>
 
 
 
@@ -27,8 +28,18 @@
     private BlazorBattles50.Shared.UserLogin user = new BlazorBattles50.Shared.UserLogin();
     private async void HandelLogin()
     {
-        await LocalStorage.SetItemAsync<bool>("IsAuthenticated", true);
-        await AuthStateProvider.GetAuthenticationStateAsync();
+        var result = await AuthService.Login(user);
+        if (result.Success)
+        {
+            await LocalStorage.SetItemAsync<bool>("IsAuthenticated", true);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+
+        }
+        else
+        {
+            ToastService.ShowError(result.Message);
+        }
+
 
     }
 }
