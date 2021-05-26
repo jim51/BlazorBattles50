@@ -37,3 +37,7 @@ https://localhost:5001/api/unit/1
 // 新增user Migration
 dotnet ef migrations add user
 dotnet ef database update
+
+// 安裝套件
+Microsoft.IdentityModel.Tokens
+System.IdentityModel.Tokens.Jwt
