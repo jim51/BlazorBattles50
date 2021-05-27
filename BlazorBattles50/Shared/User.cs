@@ -18,5 +18,6 @@ namespace BlazorBattles50.Shared
         public bool IsComfirmed { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime DateCreate { get; set; } = DateTime.Now;
+        public List<UserUnit> Units { get; set; }
     }
 }
