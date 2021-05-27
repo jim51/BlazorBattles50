@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using BlazorBattles50.Client.Services;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace BlazorBattles50.Client
     {
         private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _http;
+        private readonly IBananaService _bananaService;
 
-        public CustomAuthStateProvider(ILocalStorageService localStorageService, HttpClient http)
+        public CustomAuthStateProvider(ILocalStorageService localStorageService, HttpClient http, IBananaService bananaService)
         {
             _localStorageService = localStorageService;
             _http = http;
+            _bananaService = bananaService;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -29,8 +32,17 @@ namespace BlazorBattles50.Client
             _http.DefaultRequestHeaders.Authorization = null;
             if (!string.IsNullOrWhiteSpace(authToken))
             {
-                identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
-                _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+                try
+                {
+                    identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
+                    _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+                    await _bananaService.GetBananas();
+                }
+                catch (Exception)
+                {
+                    await _localStorageService.RemoveItemAsync("authToken");
+                    identity = new ClaimsIdentity();
+                }
             }
           
 

@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace BlazorBattles50.Client.Services
 {
     public class BananaService : IBananaService
     {
-        public int Bananas { get; set; } = 1000;
+        private readonly HttpClient _http;
+
+        public BananaService(HttpClient http)
+        {
+            _http = http;
+        }
+        public int Bananas { get; set; } = 0;
 
         public event Action OnChange;
 
@@ -20,6 +28,12 @@ namespace BlazorBattles50.Client.Services
         public void EatBananas(int amount)
         {
             Bananas -= amount;
+            BananasChanged();
+        }
+
+        public async Task GetBananas()
+        {
+            Bananas = await _http.GetFromJsonAsync<int>("/api/user/getBananas");
             BananasChanged();
         }
 
