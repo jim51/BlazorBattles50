@@ -46,5 +46,19 @@ namespace BlazorBattles50.Server.Controllers
             await _dataContext.SaveChangesAsync();
             return Ok(userUnit);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserUnits()
+        {
+            var user = await _utilityService.GetUser();
+            var userUnits = await _dataContext.UserUnits.Where(u => u.UserId == user.Id).ToListAsync();
+            var response = userUnits.Select(x => new UserUnitResponse()
+            {
+                HitPoints = x.HitPoints,
+                UnitId = x.UserId
+            }).ToList();
+
+            return Ok(response);
+        }
     }
 }
