@@ -55,7 +55,7 @@ namespace BlazorBattles50.Server.Controllers
             var response = userUnits.Select(x => new UserUnitResponse()
             {
                 HitPoints = x.HitPoints,
-                UnitId = x.UserId
+                UnitId = x.UnitId
             }).ToList();
 
             return Ok(response);
