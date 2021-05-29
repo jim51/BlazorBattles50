@@ -20,7 +20,7 @@ namespace BlazorBattles50.Client.Services
 
         public async Task GetLeaderboard()
         {
-            Leaderboard = await _http.GetFromJsonAsync<IList<UserStatistic>>("api/user/leaderboard");
+            Leaderboard = await _http.GetFromJsonAsync<IList<UserStatistic>>("api/User/LeaderBoard");
 
         }
     }
