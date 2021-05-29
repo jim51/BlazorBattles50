@@ -21,7 +21,7 @@ namespace BlazorBattles50.Server.Controllers
         private readonly DataContext _context;
         private readonly IUtilityService _utilityService;
 
-        public UserController(DataContext context, IUtilityService utilityService )
+        public UserController(DataContext context, IUtilityService utilityService)
         {
             _context = context;
             _utilityService = utilityService;
@@ -37,7 +37,7 @@ namespace BlazorBattles50.Server.Controllers
             return Ok(user.Bananas);
         }
 
-       
+
 
         [HttpPut("AddBananas")]
         public async Task<IActionResult> AddBananas([FromBody] int bananas)
@@ -46,6 +46,26 @@ namespace BlazorBattles50.Server.Controllers
             user.Bananas += bananas;
             await _context.SaveChangesAsync();
             return Ok(user.Bananas);
+        }
+
+        [HttpGet("LeaderBoard")]
+        public async Task<IActionResult> GetLeaderBoard()
+        {
+            var users = await _context.Users.Where(x => !x.IsDeleted).ToListAsync();
+
+            users = users.OrderBy(x => x.Victories).ThenBy(x => x.Defeats).ThenBy(x => x.DateCreate).ToList();
+            int rank = 1;
+            var response = users.Select(
+                x => new UserStatistic()
+                {
+                    Defeats = x.Defeats,
+                    Battles = x.Battles,
+                    Rank = rank++,
+                    UserId = x.Id,
+                    Username = x.Username,
+                    Victories = x.Victories
+                }).ToList();
+            return Ok(response);
         }
     }
 }
