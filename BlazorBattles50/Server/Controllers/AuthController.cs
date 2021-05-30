@@ -31,7 +31,8 @@ namespace BlazorBattles50.Server.Controllers
                         Username = request.Username,
                         IsComfirmed=request.IsConfirmed,
                         Email=request.Email
-                    }, request.Password
+                    }, request.Password,
+                    int.Parse(request.StartUnitId)
                 );
 
             if (!response.Success)
