@@ -89,6 +89,7 @@ namespace BlazorBattles50.Server.Controllers
                 opponent.Bananas += opponentDamageSum;
                 attacker.Bananas += attackerDamageSum * 10;
             }
+            await StoreBattleHistory(attacker, opponent, result);
             await _context.SaveChangesAsync();
         }
 
@@ -118,6 +119,18 @@ namespace BlazorBattles50.Server.Controllers
                     $"{opponent.Username}'s {randomOpponent.Unit.Title}!");
                 return damage;
             }
+        }
+
+        private async Task StoreBattleHistory(User attacker, User opponent, BattleResult result)
+        {
+            var battle = new Battle();
+            battle.Attacker = attacker;
+            battle.Opponent = opponent;
+            battle.RoundsFought = result.RoundsFought;
+            battle.WinnerDamage = result.IsVictory ? result.AttackerDamageSum : result.OpponentDamageSum;
+            battle.Winner = result.IsVictory ? attacker : opponent;
+
+            await _context.Battles.AddAsync(battle);
         }
     }
 }
