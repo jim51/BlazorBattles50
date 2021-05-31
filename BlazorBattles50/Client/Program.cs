@@ -31,7 +31,7 @@ namespace BlazorBattles50.Client
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IBattleService, BattleService>();
-            
+
 
             await builder.Build().RunAsync();
         }

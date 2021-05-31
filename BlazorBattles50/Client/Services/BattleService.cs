@@ -18,11 +18,18 @@ namespace BlazorBattles50.Client.Services
         }
 
         public BattleResult LastBattle { get; set; } = new BattleResult();
+        public IList<BattleHistoryEntry> History { get; set; } = new List<BattleHistoryEntry>();
+
+        public async Task GetHistory()
+        {
+            var reslut = await _http.GetFromJsonAsync<IList<BattleHistoryEntry>>("api/battle/history");
+            History = reslut;
+        }
 
         public async Task<BattleResult> StartBattle(int opponentId)
         {
             var result = await _http.PostAsJsonAsync("api/battle", opponentId);
-            LastBattle= await result.Content.ReadFromJsonAsync<BattleResult>();
+            LastBattle = await result.Content.ReadFromJsonAsync<BattleResult>();
             return LastBattle;
         }
     }
