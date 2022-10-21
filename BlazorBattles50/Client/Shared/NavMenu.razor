@@ -1,6 +1,5 @@
-﻿@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
-@inject AuthenticationStateProvider AuthStateProvider
-@inject NavigationManager NavigationManager
+﻿@inject BlazorBattles50.Client.Services.IAuthService AuthService
+
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href=""><img src="/icons//W_Axe013.png" /> Blazor Battles</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -52,7 +51,7 @@
                 </li>
             </NotAuthorized>
         </AuthorizeView>
-       
+
     </ul>
 </div>
 
@@ -68,8 +67,6 @@
 
     private async void logout()
     {
-        await LocalStorage.RemoveItemAsync("authToken");
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        NavigationManager.NavigateTo("/");
+        await AuthService.Logout();
     }
 }

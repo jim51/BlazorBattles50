@@ -1,7 +1,5 @@
-﻿@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
-@inject AuthenticationStateProvider AuthStateProvider
-@inject BlazorBattles50.Client.Services.IAuthService AuthService
-@inject IToastService ToastService
+﻿@inject BlazorBattles50.Client.Services.IAuthService AuthService
+
 
     Please log in below or <NavLink href="register">register</NavLink>  for a new account.
 <EditForm Model="@user" OnValidSubmit="HandelLogin">
@@ -28,18 +26,6 @@
     private BlazorBattles50.Shared.UserLogin user = new BlazorBattles50.Shared.UserLogin();
     private async void HandelLogin()
     {
-        var result = await AuthService.Login(user);
-        if (result.Success)
-        {
-            await LocalStorage.SetItemAsync<string>("authToken", result.Data);
-            await AuthStateProvider.GetAuthenticationStateAsync();
-
-        }
-        else
-        {
-            ToastService.ShowError(result.Message);
-        }
-
-
+        await AuthService.Login(user);
     }
 }
